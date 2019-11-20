@@ -3,26 +3,56 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://leaveszuki.github.io/post/fresh/</loc>
-    <lastmod>2019-11-20T16:30:48+08:00</lastmod>
+    <loc>https://example.org/categories/</loc>
+    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://leaveszuki.github.io/</loc>
-    <lastmod>2019-11-20T16:30:48+08:00</lastmod>
+    <loc>https://example.org/2019/11/hello-world/</loc>
+    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://leaveszuki.github.io/post/</loc>
-    <lastmod>2019-11-20T16:30:48+08:00</lastmod>
+    <loc>https://example.org/</loc>
+    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://leaveszuki.github.io/categories/</loc>
+    <loc>https://example.org/categories/nepu/</loc>
+    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://leaveszuki.github.io/tags/</loc>
+    <loc>https://example.org/post/</loc>
+    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://example.org/categories/study/</loc>
+    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://example.org/categories/gnn/</loc>
+    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://example.org/2019/11/neural-network/</loc>
+    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://example.org/2019/11/fresh/</loc>
+    <lastmod>2019-11-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://example.org/archives/</loc>
+  </url>
+  
+  <url>
+    <loc>https://example.org/tags/</loc>
   </url>
   
 </urlset>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Hugo tranquilpeak theme</title>
-    <link>https://example.org/post/</link>
-    <description>Recent content in Posts on Hugo tranquilpeak theme</description>
+    <title>NEPU on Hugo tranquilpeak theme</title>
+    <link>https://example.org/categories/nepu/</link>
+    <description>Recent content in NEPU on Hugo tranquilpeak theme</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 20 Nov 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://example.org/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://example.org/categories/nepu/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>

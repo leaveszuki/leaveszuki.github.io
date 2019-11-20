@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.59.1 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="Firstname Lastname">
+<meta name="keywords" content="">
+<meta name="description" content="现在需要对非欧氏结构的数据进行建模，听说最近图神经网络这块火得很，所以找了各类不同的图神经网络进行对比和分析。">
+
+
+<meta property="og:description" content="现在需要对非欧氏结构的数据进行建模，听说最近图神经网络这块火得很，所以找了各类不同的图神经网络进行对比和分析。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅读各类图神经网络">
+<meta name="twitter:title" content="浅读各类图神经网络">
+<meta property="og:url" content="https://example.org/2019/11/neural-network/">
+<meta property="twitter:url" content="https://example.org/2019/11/neural-network/">
+<meta property="og:site_name" content="Hugo tranquilpeak theme">
+<meta property="og:description" content="现在需要对非欧氏结构的数据进行建模，听说最近图神经网络这块火得很，所以找了各类不同的图神经网络进行对比和分析。">
+<meta name="twitter:description" content="现在需要对非欧氏结构的数据进行建模，听说最近图神经网络这块火得很，所以找了各类不同的图神经网络进行对比和分析。">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-11-19T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2019-11-19T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="NEPU">
+    
+      <meta property="article:section" content="">
+    
+      <meta property="article:section" content="GNN">
+    
+  
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="http://www.uml.org.cn/ai/images/20170930320.png">
+  <meta property="twitter:image" content="http://www.uml.org.cn/ai/images/20170930320.png">
+
+
+
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=640">
+
+
+    <title>浅读各类图神经网络</title>
+
+    <link rel="icon" href="https://example.org/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://example.org/2019/11/neural-network/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://example.org/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://example.org/">Hugo tranquilpeak theme</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://example.org/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://example.org/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Firstname Lastname</h4>
+        
+          <h5 class="sidebar-profile-bio">Super bio with markdown support <strong>COOL</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/636472/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      浅读各类图神经网络
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-11-19T00:00:00Z">
+        
+  November 19, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://example.org/categories/nepu">NEPU</a>, 
+    
+      <a class="category-link" href="https://example.org/categories/"></a>, 
+    
+      <a class="category-link" href="https://example.org/categories/gnn">GNN</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>现在需要对非欧氏结构的数据进行建模，听说最近图神经网络这块火得很，所以找了各类不同的图神经网络进行对比和分析。</p>
+
+<p>图神经网络的核心在于将图结构转化为向量，这个过程被称为嵌入(Embedding)，这是借鉴于自然语言处理中的Word2Vec，所以首先要对Word2Vec有初步的了解。</p>
+
+<h2 id="efficient-estimation-of-word-representations-in-vector-space">Efficient Estimation of Word Representations in Vector Space</h2>
+
+<p>Word2vec是Google开源推出的用于获取词向量的算法。词向量主要用于语言翻译任务。该文首次提出利用Embedding算法获取词向量，通过大规模的单词训练（1.6billion）得到高质量词向量。算法设计类似于神经网络模型，但没有隐藏层。获取词向量的方式主要有两种，通过已知的上下文词向量推断未知的词向量（CBOW模型），或是通过已知词向量推断未知的上下文词向量（Skip-Gram模型）。Word2Vec的主要工作就是将文本中的每个词映射到一个低维向量中。</p>
+
+<p><a href="https://blog.csdn.net/thinking_boy1992/article/details/53321827">Word2Vec 参考网站1</a></p>
+
+<p><a href="https://yq.aliyun.com/articles/175414">Word2Vec 参考网站2</a></p>
+
+<h2 id="deepwalk-online-learning-of-social-representations">DeepWalk: Online learning of social representations</h2>
+
+<p>DeepWalk受Word2Vec的启发，将节点类比成词，则算法游走的节点序列可类比成句子。首先针对每个节点运行游走算法，获取节点序列（游走长度是超参，长度是10时对梯度影响最佳）。然后运算Word2Vec得到各节点的向量。作者表示算法在博客和Youtube的社交用户分类任务中表现优异。</p>
+
+<p><a href="https://blog.csdn.net/wolfblood_zzx/article/details/73088111">DeepWalk 参考网站1</a></p>
+
+<p><a href="https://www.jianshu.com/p/5adcc3d94159">DeepWalk 参考网站2</a></p>
+
+<p><a href="https://blog.csdn.net/qq_31778495/article/details/80757478">DeepWalk 参考网站3</a></p>
+
+<h2 id="network-representation-learning-with-rich-text-information">Network representation learning with rich text information</h2>
+
+<p>本文首先证明了DeepWalk的学习过程类似于传统的矩阵分解，将邻接矩阵分解为节点的向量矩阵和上下文相关的向量矩阵。而本文提出的TADW算法（Text-associated DeepWalk）则将邻接矩阵分解成节点矩阵、上下文相关矩阵和文本特征矩阵（text feature matrix）——包含相邻节点结构信息的矩阵。从而使学到的相邻包含更多信息。</p>
+
+<p><a href="https://blog.csdn.net/qq_28358305/article/details/79704907">TADW 参考网站1</a></p>
+
+<p><a href="https://www.jianshu.com/p/be27d1be7a79">TADW 参考网站1</a></p>
+
+<p><a href="https://blog.csdn.net/travalscx/article/details/86492551">TADW 参考网站1</a></p>
+
+<h2 id="line-large-scale-information-network-embedding">LINE: Large-scale information network embedding</h2>
+
+<p>提出可处理大规模网络结构（数百万个顶点和数十亿条边）的embedding算法，模型主要分为一阶相似度模型和二阶相似度模型两部分。
+1. 一阶相似度模型：若两个节点相邻，且相接边上的权重值较大，则这两个节点的一阶相似度较大；若两个节点间没有变相邻，则两个节点间的一阶相似度为0。在建立模型中，一阶相似度会通过计算概率得出，且该模型仅适用于无向图。
+2. 二阶相似度模型：若两个节点非直接相邻，但是共享的相邻节点较多，则认为这两个节点二阶相似。该模型适用于有向图和无向图。
+3. 对比DeepWalk算法，该算法效果优异。</p>
+
+<h2 id="node2vec-scalable-feature-learning-for-networks">Node2vec: Scalable feature learning for networks</h2>
+
+<p>Node2Vec是DeepWalk和LINE的改进算法。DeepWalk是设计了随机游走算法，这是一个类似于DFS搜索节点的算法，有利于算法寻找距离较远但结构相似的节点；LINE则是仅仅则是类似于一个BFS搜素节点的算法，有利于寻找距离较近（NLP中则是上下文相关)但结构不相似的节点。Node2Vec的改进之处就是设置一个分段函数，使游走时可以调整算法选择BFS或是DFS搜索。</p>
+
+<p><a href="https://blog.csdn.net/nemoyy/article/details/81842536">Node2vec 参考网站1</a></p>
+
+<p><a href="https://www.jianshu.com/p/a9a2ed8b98be">Node2vec 参考网站2</a></p>
+
+<p><a href="https://blog.csdn.net/haolexiao/article/details/55892057">Node2vec 参考网站3</a></p>
+
+<h2 id="revised-note-on-learning-quadratic-assignment-with-graph-neural-networks">REVISED NOTE on LEARNING QUADRATIC ASSIGNMENT with GRAPH NEURAL NETWORKS</h2>
+
+<p>给定GNN模型如下所示，其中$\hat{A}={1,D,A,A_1,…,A_J,U}$，$D$是度矩阵，$A<em>J=min⁡(1,(A^2)^J)$。该模型的特点是为目标节点添加了$2^J$阶邻点的影响。节点向量$x$公式如下：
+$$ x^{k+1}=\rho(\sum</em>{B\in \hat{A}}Bx^k\theta^k_B)$$
+其中$\theta$为神经网络的训练参数</p>
+
+<h2 id="dynamic-graph-cnn-for-learning-on-point-clouds">Dynamic Graph CNN for Learning on Point Clouds</h2>
+
+<p>通过邻接结点坐标来计算边向量，通过聚合边向量更新embedding，在处理动态变化的图时，只需要重新计算变化节点的邻接节点向量即可。</p>
+
+<h2 id="laplacian-eigenmaps-and-spectral-techniques-for-embedding-and-clustering">Laplacian eigenmaps and spectral techniques for embedding and clustering</h2>
+
+<p>拉氏变化实际上是一个降维算法，主要思想是希望结构中有联系的结点（图中相连的结点）在降维后的空间中尽可能接近。在图中，根据邻接矩阵求得拉氏矩阵，根据拉氏矩阵求得顶点在降维后空间的向量，拉氏矩阵便是拉氏变化中的权重矩阵。</p>
+
+<p><a href="https://www.cnblogs.com/xbinworld/archive/2012/11/29/2795287.html">Laplacian 参考网站1</a></p>
+
+<h2 id="distributed-large-scale-natural-graph-factorization-shravan-narayanamurthy">Distributed Large-scale Natural Graph Factorization * Shravan Narayanamurthy</h2>
+
+<p>Graph Factorization算法（GF），该算法适用于大规模社交网络（无向图），结点规模在$10^8$左右，边的规模在$10^{10}$左右。降维后向量与邻接矩阵的关系如下所示，要求出降维后向量需要对公式进行求导。$\lambda$是正则向系数，是类似于学习速率的超参，$\phi$是损失函数。
+$$ \phi(Y,\lambda)=\frac{1}{2}\sum<em>{(i,j)\in E}(W</em>{ij}-<Y_i,Y_j>)^2+\frac{\lambda}{2}\sum_i||Y_i||^2$$
+<img src="./1.png" alt="" /></p>
+
+<h2 id="grarep-learning-graph-representations-with-global-structural-information">GraRep: Learning graph representations with global structural information</h2>
+
+<p>主要适用于社交网络任务（无向图），创新点是设计了一个常量k，计算k阶邻点对目标节点的影响。降维向量公式如下所示，其中A是度矩阵的逆乘以邻接矩阵，β是偏置参数。
+$$ Y^k_{i,j}=W^k_i\bullet C^k<em>j=log(\frac{A^k</em>{i,j}}{\sum<em>tA^k</em>{t,j}}-log(\beta))$$</p>
+
+<h2 id="asymmetric-transitivity-preserving-graph-embedding">Asymmetric transitivity preserving graph embedding</h2>
+
+<p>HOPE算法，主要适用于有向图，提出应该计算输出向量（从目标节点出发可以到达的节点对目标节点的影响）和输入向量（可以到达目标节点之结点对目标节点的影响）。其损失函数$L$为:
+$$L=||S-Y_sY_t^T||^2_F$$
+其中$S$为相似度矩阵</p>
+
+<h2 id="graph-embedding-techniques-applications-and-performance-a-survey">Graph Embedding Techniques, Applications, and Performance: A Survey</h2>
+
+<p>综述性文章，基本总结了已有的embedding算法
+<img src="./2.png" alt="" />
+<img src="./3.png" alt="" />
+<a href="https://zhuanlan.zhihu.com/p/62629465">参考网站1</a></p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/75307407">参考网站2</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/11/hello-world/" data-tooltip="Hello World！">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/11/fresh/" data-tooltip="CS研究生如何快速入门一个全新领域？">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://example.org/2019/11/neural-network/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://example.org/2019/11/neural-network/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://example.org/2019/11/neural-network/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 Firstname Lastname. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/11/hello-world/" data-tooltip="Hello World！">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/11/fresh/" data-tooltip="CS研究生如何快速入门一个全新领域？">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://example.org/2019/11/neural-network/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://example.org/2019/11/neural-network/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://example.org/2019/11/neural-network/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fexample.org%2F2019%2F11%2Fneural-network%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fexample.org%2F2019%2F11%2Fneural-network%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fexample.org%2F2019%2F11%2Fneural-network%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/d09dc2d7aa5c467519e8af89f7b3d94c?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Firstname Lastname</h4>
+    
+      <div id="about-card-bio">Super bio with markdown support <strong>COOL</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Your job title
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        France
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://example.org/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://example.org/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/example.org\/2019\/11\/neural-network\/';
+          
+            this.page.identifier = '\/2019\/11\/neural-network\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
