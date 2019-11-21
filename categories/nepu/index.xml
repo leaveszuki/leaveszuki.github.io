@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>NEPU on Hugo tranquilpeak theme</title>
-    <link>https://leaveszuki.github.io/categories/nepu/</link>
-    <description>Recent content in NEPU on Hugo tranquilpeak theme</description>
+    <title>NEPU on Zuki Blog</title>
+    <link>https://example.org/categories/nepu/</link>
+    <description>Recent content in NEPU on Zuki Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
+    <language>zh-cn</language>
     <lastBuildDate>Wed, 20 Nov 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://leaveszuki.github.io/categories/nepu/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://example.org/categories/nepu/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Hello World！</title>
-      <link>https://leaveszuki.github.io/2019/11/hello-world/</link>
+      <link>https://example.org/2019/11/hello-world/</link>
       <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://leaveszuki.github.io/2019/11/hello-world/</guid>
+      <guid>https://example.org/2019/11/hello-world/</guid>
       <description>&lt;p&gt;给自己定一个小目标，一周三博，加油！&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>浅读各类图神经网络</title>
-      <link>https://leaveszuki.github.io/2019/11/neural-network/</link>
+      <link>https://example.org/2019/11/neural-network/</link>
       <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://leaveszuki.github.io/2019/11/neural-network/</guid>
+      <guid>https://example.org/2019/11/neural-network/</guid>
       <description>&lt;p&gt;现在需要对非欧氏结构的数据进行建模，听说最近图神经网络这块火得很，所以找了各类不同的图神经网络进行对比和分析。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>CS研究生如何快速入门一个全新领域？</title>
-      <link>https://leaveszuki.github.io/2019/11/fresh/</link>
+      <link>https://example.org/2019/11/fresh/</link>
       <pubDate>Sun, 17 Nov 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://leaveszuki.github.io/2019/11/fresh/</guid>
+      <guid>https://example.org/2019/11/fresh/</guid>
       <description>&lt;p&gt;该篇笔记主要分享入门新领域过程中的一些经验，顺带整理目前已知的文献搜索方法。&lt;/p&gt;</description>
     </item>
     
